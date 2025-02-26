@@ -40,18 +40,18 @@ public class BookController {
 	public Book getBookId(@PathVariable Long id) {
 		return bookService.searchBookByID(id);
 	}
-	
+
 	@PostMapping()
-	public ResponseEntity<Book>  addBook(@RequestBody Book book) {
+	public ResponseEntity<Book> addBook(@RequestBody Book book) {
 		authorService.addAuthor(book);
-	     Book savedBook =bookService.addBook(book);
-	     return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
+		Book savedBook = bookService.addBook(book);
+		return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
 	}
 	
-	
+
 	@DeleteMapping(("/{id}"))
 	public void deleteBook(@PathVariable Long id) {
-		bookService.removeBook(id);
+		authorService.removeAuthor(id);
 
 	}
 

@@ -34,21 +34,17 @@ public class AuthorService {
 		try {
 			// Step 1: Search for author by ID
 			author = serachById(book.getAuthor().getId());
-
 			// Step 2: Check if the existing author's name matches the new author's name
-			if (author.getName().equals(book.getAuthor().getName())) {
-				throw new IllegalArgumentException(
-						"Author ID already exists  with a same name choose different author name");
+			if (!author.getName().equals(book.getAuthor().getName())) {
+				throw new IllegalArgumentException("Author ID Already Exists With Different Name");
 			}
 
 		} catch (AuthorNotFoundException e) { // Step 2: If not found, handle the exception
-
 			// Step 3: If author not found by ID, check if an author with the same name
 			// exists
 			if (authorRepo.existsByName(book.getAuthor().getName())) {
 				throw new IllegalArgumentException("An author with the same name already exists.");
 			}
-
 			// Step 3: Create a new author if not found
 			author = new Author();
 			author.setId(book.getAuthor().getId());
