@@ -38,6 +38,8 @@ public class BookService {
 //    @Transactional
 //    @CacheEvict(value = "booksCache", allEntries = true)  // Clear cache when adding a new book
     public Book addBook(Book book) {
+    	
+    	
         return books.save(book);
     }
 

@@ -40,50 +40,19 @@ public class BookController {
 	public Book getBookId(@PathVariable Long id) {
 		return bookService.searchBookByID(id);
 	}
-
-//	@PostMapping()
-//	public ResponseEntity<Book> addBook(@RequestBody Book book) {
-//		Author author = book.getAuthor();
-//		
-//		System.out.println(book.getAuthor());
-//		
-//		if (author == null) {
-//			System.out.println("this is null author");
-//			author = authorService.addAuthor(new Author());
-//			System.out.println("this is null author 1");
-//			
-//		} else {
-//			System.out.println("this is full author");
-//			author = authorService.serachById(author.getId());
-//			System.out.println("this is full author");
-//		}
-//		book.setAuthor(author);
-//		Book saveBook = bookService.addBook(book);
-//		return ResponseEntity.status(HttpStatus.OK).body(saveBook);
-//	}
-
 	
 	@PostMapping()
-	public void  addBook(@RequestBody Book book) {
-	    Author author;
-	    
-	    try {
-	        author = authorService.serachById(book.getAuthor().getId());
-	    } catch (BookNotFoundException e) {
-	        author = new Author();
-	        author.setId(book.getAuthor().getId());
-	        author.setName(book.getAuthor().getName());
-	        author = authorService.addAuthor(author);
-	    }
-        
-	    book.setAuthor(author);
-	    bookService.addBook(book);
+	public ResponseEntity<Book>  addBook(@RequestBody Book book) {
+		authorService.addAuthor(book);
+	     Book savedBook =bookService.addBook(book);
+	     return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
 	}
 	
 	
 	@DeleteMapping(("/{id}"))
 	public void deleteBook(@PathVariable Long id) {
 		bookService.removeBook(id);
+
 	}
 
 }
