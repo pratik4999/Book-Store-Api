@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.bookstore.exception.AuthorNotFoundException;
@@ -24,8 +25,9 @@ public class AuthorService {
 //		return authorRepo.save(author);
 //	}
 
+	@Transactional
+	@CacheEvict(value = "booksCache", allEntries = true) // Clear cache when adding a new book
 	public void addAuthor(Book book) {
-
 		if (book.getAuthor() == null) {
 			throw new IllegalArgumentException("Book must have an author.");
 		}
@@ -56,10 +58,13 @@ public class AuthorService {
 
 	}
 
+	@Transactional
+	@CacheEvict(value = "booksCache", allEntries = true) // Clear cache when removing a book
 	public void removeAuthor(long id) {
 		authorRepo.deleteById(id);
 	}
 
+	@Cacheable(value = "booksCache", key = "#id") // Cache individual book by ID
 	public Author serachById(long id) {
 		return authorRepo.findById(id)
 				.orElseThrow(() -> new AuthorNotFoundException("Author not found with id: " + id));

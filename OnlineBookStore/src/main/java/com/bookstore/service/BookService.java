@@ -23,20 +23,20 @@ public class BookService {
     @Autowired
 	private AuthorRepository authorRepo;
 
-//    @Transactional(readOnly = true)
-//    @CacheEvict(value = "booksCache", key = "'allBooks'")  // Cache all books
+    @Transactional(readOnly = true)
+    @CacheEvict(value = "booksCache", key = "'allBooks'")  // Cache all books
     public List<Book> getAllBooks() {
         return books.findAll();
     }
 
-//    @Cacheable(value = "booksCache", key = "#id")  // Cache individual book by ID
+    @Cacheable(value = "booksCache", key = "#id")  // Cache individual book by ID
     public Book searchBookByID(long id) {
         return books.findById(id)
                 .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
     }
 
-//    @Transactional
-//    @CacheEvict(value = "booksCache", allEntries = true)  // Clear cache when adding a new book
+    @Transactional
+    @CacheEvict(value = "booksCache", allEntries = true)  // Clear cache when adding a new book
     public Book addBook(Book book) {
     	
     	
@@ -44,8 +44,8 @@ public class BookService {
     }
 
 
-//    @Transactional
-//    @CacheEvict(value = "booksCache", allEntries = true)  // Clear cache when removing a book
+    @Transactional
+    @CacheEvict(value = "booksCache", allEntries = true)  // Clear cache when removing a book
     public void removeBook(long id) {
         if (!books.existsById(id)) {
             throw new BookNotFoundException("Book not found with id: " + id);

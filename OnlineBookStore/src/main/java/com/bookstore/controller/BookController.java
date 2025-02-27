@@ -31,7 +31,7 @@ public class BookController {
 	@Autowired
 	private AuthorService authorService;
 
-	@GetMapping
+	@GetMapping("/all")
 	public List<Book> getAllBooks() {
 		return bookService.getAllBooks();
 	}
@@ -41,7 +41,7 @@ public class BookController {
 		return bookService.searchBookByID(id);
 	}
 
-	@PostMapping()
+	@PostMapping("/add")
 	public ResponseEntity<Book> addBook(@RequestBody Book book) {
 		authorService.addAuthor(book);
 		Book savedBook = bookService.addBook(book);
@@ -49,7 +49,7 @@ public class BookController {
 	}
 	
 
-	@DeleteMapping(("/{id}"))
+	@DeleteMapping(("/delete/{id}"))
 	public void deleteBook(@PathVariable Long id) {
 		authorService.removeAuthor(id);
 
