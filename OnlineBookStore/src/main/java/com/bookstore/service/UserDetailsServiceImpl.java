@@ -1,7 +1,5 @@
 package com.bookstore.service;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,11 +28,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
 		// Convert roles (e.g., "ROLE_ADMIN,ROLE_USER") into authorities
-		List<GrantedAuthority> authorities = Arrays.stream(user.getRole().split(",")).map(SimpleGrantedAuthority::new)
-				.collect(Collectors.toList());
+		List<GrantedAuthority> authorities = List.of(user.getRole().split(",")).stream()
+				.map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
-		return new org.springframework.security.core.userdetails.User(user.getName(), // Ensure it matches database
-																						// field
-				user.getPassword(), authorities);
+		return org.springframework.security.core.userdetails.User.builder().username(user.getName()) // Ensuring it
+																										// matches DB
+				.password(user.getPassword()) // Stored in DB (hashed)
+				.authorities(authorities) // Add roles/authorities
+				.build();
+	}
+
+	//Load user by username explicitly (for token validation)
+	public User loadUserEntityByUsername(String username) {
+		return userRepository.findByname(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}
 }
